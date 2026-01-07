@@ -1,21 +1,23 @@
-import json
-import random
-from datetime import datetime
+name: Python Data Pipeline
 
-# Simulate fetching data
-print("--- STARTING ETL JOB ---")
+on: workflow_dispatch
 
-data = {
-    "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    "users_processed": random.randint(100, 500),
-    "status": "SUCCESS"
-}
-
-# Simulate processing
-print(f"Processing data for {data['date']}...")
-print(f"Total users found: {data['users_processed']}")
-
-# Output result as JSON
-print(json.dumps(data, indent=2))
-
-print("--- JOB FINISHED ---")
+jobs:
+  run-etl:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # CRITICAL STEP 1: Check out the code
+      # Without this, the robot has an empty folder!
+      - name: Check out code
+        uses: actions/checkout@v3
+      
+      # CRITICAL STEP 2: Install Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      # Step 3: Run your script
+      - name: Run ETL Script
+        run: python etl_script.py

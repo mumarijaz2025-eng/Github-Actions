@@ -1,8 +1,25 @@
-name: hello-world
-on: push
+name: Python Data Pipeline
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # Run every day at 8am
+  workflow_dispatch:      # Allow manual run button
+
 jobs:
-  my-job:
+  run-etl:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+      # Step 1: Download your code (including etl_script.py)
+      - name: Check out code
+        uses: actions/checkout@v3
+      
+      # Step 2: Install Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      # Step 3: actually RUN the file you just created
+      - name: Run ETL Script
+        run: python etl_script.py

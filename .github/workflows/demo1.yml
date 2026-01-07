@@ -1,9 +1,24 @@
-- name: Set up Python
+name: Python Data Pipeline
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-etl:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
           
-      # NEW STEP: Install libraries from your file
+      # This is the new step that installs Pandas
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
